@@ -1,3 +1,5 @@
 # BayerDistanceDither
 
-使用抖动来代替blend制作gameobject靠近相机时的淡入淡出效果
+浣跨敤鎶栧姩鏉ヤ唬鏇縝lend鍒朵綔gameobject闈犺繎鐩告満鏃剁殑娣″叆娣″嚭鏁堟灉
+
+![screenshot](https://raw.githubusercontent.com/lifangjie/BayerDistanceDither/master/screenshot.png)
