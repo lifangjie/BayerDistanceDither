@@ -45,7 +45,7 @@ Shader "Custom/TestBlend"
 				v2f o;
 				float4 pos = UnityObjectToClipPos(v.vertex);
 				COMPUTE_EYEDEPTH(o.depth);
-				#if defined(SHADER_API_GLCORE)
+				#if defined(SHADER_API_GLCORE) || defined(SHADER_API_GLES3)
 				o.depth = (1-o.depth);
 				#endif
 				outpos = UnityObjectToClipPos(v.vertex);
