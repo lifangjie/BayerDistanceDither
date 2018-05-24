@@ -5,6 +5,7 @@ Shader "Custom/TestBayer"
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "black" {}
+		DitherRange ("float", float) = 2
 	}
 	SubShader
 	{
@@ -18,7 +19,7 @@ Shader "Custom/TestBayer"
 			#pragma fragment frag
 			// make fog work
 			#pragma multi_compile_fog
-            #pragma target 4.0
+            #pragma target 3.0
 			
 			#include "UnityCG.cginc"
 			#include "BayerDither.cginc"
@@ -44,8 +45,8 @@ Shader "Custom/TestBayer"
 				v2f o;
 				float4 pos = UnityObjectToClipPos(v.vertex);
 				COMPUTE_EYEDEPTH(o.depth);
-				#if defined(SHADER_API_GLCORE)
-				o.depth = (1-o.depth);
+				#if defined(SHADER_API_GLCORE) || defined(SHADER_API_GLES3)
+				o.depth = 1 - o.depth; 
 				#endif
 				outpos = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);

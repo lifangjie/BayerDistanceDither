@@ -6,7 +6,6 @@ public class BayerDitherMatrix :MonoBehaviour{
         float[] bayerMatrix = new float[256];
         GenerateBayerDitherMatrix(ref bayerMatrix, 16);
         Shader.SetGlobalFloatArray("bayerMatrix", bayerMatrix);
-        Shader.SetGlobalFloat("ditherRange", 2);
     }
 
     private static void GenerateBayerDitherMatrix(ref float[] output, int n) {
