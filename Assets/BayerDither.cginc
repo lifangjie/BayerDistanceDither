@@ -3,5 +3,6 @@ uniform float ditherRange;
 
 void ClipByBayerDither(float depth, UNITY_VPOS_TYPE screenPos) {
 	depth = ditherRange - LinearEyeDepth(depth) * ditherRange;
-	clip(depth - bayerMatrix[(screenPos.x * 16 + screenPos.y) % 256]);
+	screenPos = frac(floor(screenPos)/16);
+	clip(depth - bayerMatrix[screenPos.x*256 + screenPos.y*16]);
 }
