@@ -4,7 +4,7 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: BlendMaterial
   m_Shader: {fileID: 4800000, guid: c9c7e78b73dd4fe9817924c34b4a14bd, type: 3}
@@ -55,10 +55,14 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - DispearDistance: 2
+    - DispearRange: 2
     - DitherRange: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _DisappearDistance: 10
+    - _DisappearRange: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5

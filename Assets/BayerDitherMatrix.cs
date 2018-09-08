@@ -1,8 +1,10 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+[InitializeOnLoad]
 public class BayerDitherMatrix :MonoBehaviour{
-    private void Start() {
+    static BayerDitherMatrix() {
         float[] bayerMatrix = new float[256];
         GenerateBayerDitherMatrix(ref bayerMatrix, 16);
         Shader.SetGlobalFloatArray("bayerMatrix", bayerMatrix);

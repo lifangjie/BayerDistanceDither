@@ -1,11 +1,10 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "Custom/TestBayer"
+﻿Shader "Custom/TestBayer"
 {
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "black" {}
-		DitherRange ("float", float) = 2
+		_DisappearRange ("Disappear Range", float) = 2
+		_DisappearDistance ("Disappear Distance", float) = 2
 	}
 	SubShader
 	{
@@ -17,8 +16,6 @@ Shader "Custom/TestBayer"
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			// make fog work
-			#pragma multi_compile_fog
             #pragma target 3.0
 			
 			#include "UnityCG.cginc"
@@ -33,32 +30,29 @@ Shader "Custom/TestBayer"
 			struct v2f
 			{
 				float2 uv : TEXCOORD0;
-				float depth : TEXCOORD1;
-				UNITY_FOG_COORDS(1)
+				float disappearAlpha : TEXCOORD1;
 			};
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
+			
+            uniform float _DisappearRange;
+            uniform float _DisappearDistance;
 
-			v2f vert (appdata v, out float4 outpos : SV_POSITION)
+			v2f vert (appdata v, out float4 pos : SV_POSITION)
 			{
 				v2f o;
-				float4 pos = UnityObjectToClipPos(v.vertex);
-				COMPUTE_EYEDEPTH(o.depth);
-				#if defined(SHADER_API_GLCORE) || defined(SHADER_API_GLES3)
-				o.depth = 1 - o.depth; 
-				#endif
-				outpos = UnityObjectToClipPos(v.vertex);
+				pos = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-				UNITY_TRANSFER_FOG(o,o.vertex);
+				float viewDistance = length(mul(unity_ObjectToWorld, v.vertex).xyz - _WorldSpaceCameraPos);
+				o.disappearAlpha = saturate((_DisappearDistance - viewDistance) * _DisappearRange);
 				return o;
 			}
 			
 			fixed4 frag (v2f i, UNITY_VPOS_TYPE screenPos : VPOS) : SV_Target
 			{
-				ClipByBayerDither(i.depth, screenPos);
 				fixed4 col = tex2D(_MainTex, i.uv);
-				UNITY_APPLY_FOG(i.fogCoord, col);
+				ClipByBayerDither(i.disappearAlpha, screenPos);
 				return col;
 			}
 			ENDCG
